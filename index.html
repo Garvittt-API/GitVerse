@@ -1,261 +1,1645 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#080914" />
-<title>NEXORA — Build Beyond Limits</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-  :root{--bg:#080914;--panel:rgba(255,255,255,.055);--line:rgba(255,255,255,.12);--text:#f5f6ff;--muted:#a4a7c1;--cyan:#6cf4ff;--violet:#9c7bff;--pink:#ff7bd5}
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
-  body:before{content:"";position:fixed;inset:0;z-index:-3;background:radial-gradient(ellipse at 15% 10%,#25205c 0,transparent 36%),radial-gradient(ellipse at 90% 20%,#172c53 0,transparent 30%),radial-gradient(ellipse at 60% 85%,#28133f 0,transparent 35%),#080914}
-  body:after{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.15;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:58px 58px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
-  a{color:inherit;text-decoration:none}
-  button{font:inherit;cursor:pointer}
-  .wrap{width:min(1160px,calc(100% - 44px));margin:auto}
-  .nav{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08)}
-  .brand{display:flex;align-items:center;gap:11px;font:700 1.25rem 'Space Grotesk';letter-spacing:.08em}
-  .brand-mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--violet));display:grid;place-items:center;color:#090b18;font-weight:900;box-shadow:0 0 26px #8a78ff55}
-  .nav-links{display:flex;align-items:center;gap:32px;color:#c2c4d8;font-size:.9rem}
-  .nav-links a:hover{color:var(--cyan)}
-  .nav-cta,.btn{border:1px solid var(--line);border-radius:999px;padding:12px 19px;background:rgba(255,255,255,.06);color:white;transition:.25s}
-  .nav-cta:hover,.btn:hover{transform:translateY(-2px);border-color:#8c86ff;box-shadow:0 8px 30px #7965ff24}
-  .btn-primary{background:linear-gradient(105deg,#7b76ff,#9d6dff 55%,#e078d8);border:0;color:#fff;font-weight:700;box-shadow:0 8px 35px #8a6cff44}
-  .menu-toggle{display:none;background:none;border:0;color:white;font-size:1.6rem}
-  .hero{min-height:690px;display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:42px;padding:70px 0 85px}
-  .eyebrow{display:inline-flex;align-items:center;gap:9px;padding:8px 13px;border:1px solid #9c7bff4a;background:#9c7bff12;border-radius:999px;color:#d9d2ff;font-size:.78rem;letter-spacing:.04em;margin-bottom:25px}
-  .dot{width:7px;height:7px;background:var(--cyan);border-radius:50%;box-shadow:0 0 13px var(--cyan);animation:pulse 1.8s infinite}
-  h1,h2,h3{font-family:'Space Grotesk',sans-serif}
-  h1{font-size:clamp(3.3rem,6vw,5.5rem);line-height:.99;letter-spacing:-.065em;max-width:680px}
-  .gradient-text{background:linear-gradient(100deg,#fff 4%,#9feeff 36%,#b49aff 68%,#ff9cdd);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .hero-copy{font-size:1.08rem;line-height:1.8;color:var(--muted);max-width:530px;margin:25px 0 30px}
-  .hero-actions{display:flex;gap:13px;flex-wrap:wrap}
-  .hero-actions .btn{padding:15px 22px}
-  .micro-proof{display:flex;align-items:center;gap:13px;margin-top:35px;color:#aeb0c9;font-size:.82rem}
-  .avatars{display:flex;padding-left:4px}
-  .avatar{width:29px;height:29px;border-radius:50%;border:2px solid var(--bg);margin-left:-5px;display:grid;place-items:center;font-size:.65rem;background:linear-gradient(135deg,#5bd9e9,#8a69e9)}
-  .avatar:nth-child(2){background:linear-gradient(135deg,#f2a4cb,#8869ed)}.avatar:nth-child(3){background:linear-gradient(135deg,#ffd17e,#e96a9e)}.avatar:nth-child(4){background:linear-gradient(135deg,#7ee8c8,#4387de)}
-  .visual{position:relative;min-height:475px;display:grid;place-items:center;perspective:1000px}
-  .orb{position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#b4faff 0,#8d77ff 18%,#542cba 44%,#101024 70%);filter:blur(1px);opacity:.82;box-shadow:0 0 90px #8270ff50, inset -25px -25px 60px #070817;animation:float 7s ease-in-out infinite}
-  .orb:before,.orb:after{content:"";position:absolute;inset:-35px;border:1px solid #b4a5ff45;border-radius:50%;transform:rotateX(68deg) rotateZ(-24deg)}
-  .orb:after{inset:-65px;transform:rotateX(68deg) rotateZ(33deg);border-color:#6cf4ff42}
-  .orbit-dot{position:absolute;width:11px;height:11px;border-radius:50%;background:var(--cyan);box-shadow:0 0 24px var(--cyan);top:77px;right:94px}
-  .dashboard{position:relative;z-index:2;width:min(440px,100%);border:1px solid #ffffff26;background:linear-gradient(145deg,rgba(23,25,49,.88),rgba(11,12,28,.84));backdrop-filter:blur(22px);border-radius:22px;padding:20px;box-shadow:0 30px 100px #0008;transform:rotateY(-7deg) rotateX(3deg);animation:cardFloat 6s ease-in-out infinite}
-  .dash-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:17px;border-bottom:1px solid var(--line)}
-  .dash-title{font:600 .9rem 'Space Grotesk'}
-  .live{font-size:.7rem;color:#86ffd5;background:#59ffc013;border:1px solid #59ffc035;padding:5px 8px;border-radius:6px}
-  .dash-stat{padding:22px 0 14px;display:flex;justify-content:space-between;align-items:flex-end}
-  .stat-label{font-size:.78rem;color:var(--muted)}
-  .stat-number{font:600 2.25rem 'Space Grotesk';margin-top:7px}
-  .trend{color:#81ffd0;font-size:.8rem}
-  .chart{height:115px;position:relative;overflow:hidden;border-bottom:1px solid #ffffff15;margin-bottom:20px}
-  .chart svg{width:100%;height:100%;overflow:visible}
-  .chart-grid{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0 27px,#ffffff0c 28px 29px)}
-  .dash-bottom{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-  .mini{background:#ffffff07;border:1px solid #ffffff0b;padding:12px;border-radius:12px}
-  .mini small{display:block;color:var(--muted);font-size:.68rem;margin-bottom:8px}
-  .mini strong{font:600 1rem 'Space Grotesk'}
-  .float-card{position:absolute;z-index:3;background:#15172bdb;border:1px solid #ffffff22;backdrop-filter:blur(16px);border-radius:14px;padding:13px 15px;box-shadow:0 15px 40px #0005}
-  .float-card.one{left:-2px;top:75px;animation:float 5s ease-in-out infinite}
-  .float-card.two{right:-7px;bottom:63px;animation:float 6s ease-in-out infinite reverse}
-  .float-head{font-size:.72rem;color:var(--muted);margin-bottom:8px}
-  .float-value{font:600 1.05rem 'Space Grotesk'}
-  .float-icon{display:inline-grid;place-items:center;width:25px;height:25px;border-radius:8px;background:#5dffc01a;color:#7dffd0;margin-right:7px}
-  .trust{padding:25px 0 55px;border-top:1px solid #ffffff0c;text-align:center}
-  .trust p{font-size:.76rem;color:#777b9a;text-transform:uppercase;letter-spacing:.18em;margin-bottom:25px}
-  .logo-row{display:flex;justify-content:space-around;align-items:center;gap:25px;flex-wrap:wrap;color:#a4a7c1;font:600 1.05rem 'Space Grotesk';opacity:.8}
-  .logo-row span{display:flex;gap:8px;align-items:center}
-  .section{padding:95px 0}
-  .section-head{text-align:center;max-width:680px;margin:0 auto 48px}
-  .kicker{color:var(--cyan);text-transform:uppercase;letter-spacing:.18em;font-size:.73rem;font-weight:700;margin-bottom:15px}
-  h2{font-size:clamp(2.25rem,4vw,3.5rem);letter-spacing:-.055em;line-height:1.08}
-  .section-head p{color:var(--muted);line-height:1.8;margin-top:18px}
-  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  .feature{position:relative;padding:27px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#ffffff09,#ffffff03);overflow:hidden;transition:.3s}
-  .feature:before{content:"";position:absolute;width:140px;height:140px;background:#8e76ff16;filter:blur(45px);right:-50px;top:-60px;transition:.3s}
-  .feature:hover{transform:translateY(-6px);border-color:#8d82ff78;background:#ffffff0b}
-  .feature-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#6cf4ff22,#9c7bff24);border:1px solid #9c7bff45;font-size:1.35rem;margin-bottom:25px}
-  .feature h3{font-size:1.15rem;margin-bottom:12px}
-  .feature p{color:var(--muted);font-size:.92rem;line-height:1.75}
-  .feature a{display:inline-block;color:#bcb4ff;font-size:.85rem;margin-top:22px}
-  .showcase{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:center}
-  .showcase-copy p{color:var(--muted);line-height:1.85;margin:22px 0}
-  .checklist{display:grid;gap:14px;margin:25px 0 30px}
-  .check{display:flex;gap:12px;align-items:center;color:#d8daec;font-size:.93rem}
-  .check i{font-style:normal;color:var(--cyan);font-size:1.05rem}
-  .code-window{border:1px solid #ffffff20;background:#0d1020;border-radius:19px;overflow:hidden;box-shadow:0 30px 80px #0005;transform:rotate(1deg)}
-  .window-bar{height:48px;background:#ffffff06;border-bottom:1px solid #ffffff12;display:flex;align-items:center;padding:0 17px;gap:7px}
-  .win-dot{width:8px;height:8px;border-radius:50%;background:#ff6c92}.win-dot:nth-child(2){background:#ffd16c}.win-dot:nth-child(3){background:#6cffc2}
-  .window-label{margin-left:auto;color:#737994;font-size:.72rem}
-  pre{padding:25px;overflow:auto;color:#c8d1f4;font: .84rem/1.9 ui-monospace,SFMono-Regular,Consolas,monospace}
-  .c-purple{color:#c7a4ff}.c-cyan{color:#76efff}.c-green{color:#8dffc8}.c-muted{color:#626d91}
-  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px}
-  .metric{text-align:center;padding:25px 10px;border:1px solid #ffffff12;border-radius:16px;background:#ffffff04}
-  .metric strong{display:block;font:700 2rem 'Space Grotesk';letter-spacing:-.04em}
-  .metric span{display:block;color:var(--muted);font-size:.82rem;margin-top:8px}
-  .testimonial{max-width:850px;margin:auto;text-align:center;padding:45px;border:1px solid #ffffff19;border-radius:24px;background:linear-gradient(135deg,#ffffff09,#ffffff03);position:relative}
-  .quote-mark{font:4rem Georgia;color:#9c7bff;line-height:1}
-  .testimonial blockquote{font:500 clamp(1.2rem,2.4vw,1.75rem)/1.6 'Space Grotesk';margin:12px 0 25px}
-  .person{display:flex;justify-content:center;align-items:center;gap:12px}
-  .person-avatar{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#6cf4ff,#9c7bff);color:#0a0c1b;font-weight:800}
-  .person-info{text-align:left}.person-info strong{font-size:.86rem}.person-info small{display:block;color:var(--muted);margin-top:3px}
-  .cta-panel{position:relative;overflow:hidden;text-align:center;padding:72px 28px;border:1px solid #a997ff42;border-radius:28px;background:radial-gradient(ellipse at 50% 120%,#7e55ff30,transparent 60%),linear-gradient(135deg,#17162f,#101122)}
-  .cta-panel:before{content:"";position:absolute;width:300px;height:300px;left:-120px;top:-170px;border-radius:50%;background:#64eaff16;filter:blur(25px)}
-  .cta-panel h2{max-width:700px;margin:0 auto}
-  .cta-panel p{color:var(--muted);margin:18px auto 28px;line-height:1.8;max-width:540px}
-  footer{padding:35px 0 28px;border-top:1px solid #ffffff10;margin-top:80px}
-  .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
-  .footer-copy{color:#777b98;font-size:.8rem}.footer-links{display:flex;gap:22px;color:#a4a7c1;font-size:.82rem}
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:translateY(0)}
-  @keyframes pulse{50%{opacity:.35;box-shadow:0 0 3px var(--cyan)}}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
-  @keyframes cardFloat{0%,100%{transform:rotateY(-7deg) rotateX(3deg) translateY(0)}50%{transform:rotateY(-4deg) rotateX(1deg) translateY(-9px)}}
-  @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:65px}.hero-copy{max-width:650px}.visual{min-height:450px;margin:0 auto;width:min(570px,100%)}.features{grid-template-columns:repeat(2,1fr)}.showcase{grid-template-columns:1fr;gap:42px}.showcase-copy{max-width:650px}.metrics{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:650px){.wrap{width:min(100% - 30px,1160px)}.nav{height:70px}.nav-links{display:none;position:absolute;top:70px;left:15px;right:15px;padding:22px;background:#121328;border:1px solid var(--line);border-radius:15px;flex-direction:column;gap:22px;z-index:10}.nav-links.open{display:flex}.menu-toggle{display:block}.nav-cta{display:none}.hero{padding:54px 0 65px;gap:15px}.eyebrow{font-size:.69rem}h1{font-size:clamp(3rem,14vw,4.4rem)}.hero-copy{font-size:.98rem}.visual{min-height:380px;transform:scale(.94)}.orb{width:250px;height:250px}.dashboard{padding:14px}.float-card.one{left:-7px;top:35px}.float-card.two{right:-7px;bottom:35px}.section{padding:68px 0}.features{grid-template-columns:1fr}.section-head{margin-bottom:32px}.testimonial{padding:28px 20px}.logo-row{font-size:.9rem}.metrics{gap:9px}.metric{padding:20px 5px}.metric strong{font-size:1.65rem}.footer-inner{justify-content:center;text-align:center}.footer-links{justify-content:center;width:100%}pre{font-size:.72rem;padding:18px}}
-  @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}.reveal{opacity:1;transform:none}}
-</style>
+  <meta charset="UTF-8">
+  <title>Petalyx — Benchmark all AI staff</title>
+  <meta name="description" content="Benchmark the impact of all your AI staff.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Fonts: Inter Tight -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS & GLOBAL CSS
+       ========================================================================== */
+    :root {
+      --ink: #121410;
+      --olive: #4d6a10;
+      --green: #6f9a0c;
+      --lime: #b4cd52;
+      --pill: #e7efcf;
+      --line: #eef0ea;
+      --bg: #fff;
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      background: #e9eee0;
+    }
+
+    html.lenis, html.lenis body {
+      height: auto;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    body {
+      font-family: "Inter Tight", system-ui, sans-serif;
+      color: var(--ink);
+      background: transparent;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img, video {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Shared Components */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--pill);
+      color: #2c3a10;
+      letter-spacing: .01em;
+      line-height: 1;
+      width: fit-content;
+    }
+
+    .h2 {
+      font-size: clamp(26px, 3.1vw, 44px);
+      font-weight: 400;
+      letter-spacing: -.03em;
+      line-height: 1.12;
+      text-align: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: var(--olive);
+      color: #f3f8e4;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      white-space: nowrap;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 2px 6px rgba(60, 80, 10, .25);
+      transition: transform .3s, background .3s;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: #5a7c14;
+    }
+
+    .w {
+      display: inline-block;
+      will-change: transform, filter, opacity;
+    }
+
+    .glass {
+      position: absolute;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .16);
+      border: 1px solid rgba(255, 255, 255, .55);
+      backdrop-filter: blur(10px) saturate(1.2);
+      -webkit-backdrop-filter: blur(10px) saturate(1.2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4);
+    }
+
+    .grid-sq {
+      position: absolute;
+      border: 1px solid #edf0e8;
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    @keyframes driftA {
+      to {
+        transform: translateX(26px) translateY(4px);
+      }
+    }
+
+    @keyframes driftB {
+      to {
+        transform: translateX(-30px) translateY(6px);
+      }
+    }
+
+    .drift-a {
+      animation: driftA 14s ease-in-out infinite alternate;
+    }
+
+    .drift-b {
+      animation: driftB 17s ease-in-out infinite alternate;
+    }
+
+    /* ==========================================================================
+       INTRO BACKDROP & APP WRAPPER
+       ========================================================================== */
+    .backdrop {
+      position: fixed;
+      inset: -40px;
+      z-index: 0;
+      background: url('https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093215_b7826239-e451-4e15-b42b-d6bcf9497a32.png') center 70% / cover no-repeat;
+      filter: blur(18px) saturate(1.1);
+      transform: scale(1.3);
+      pointer-events: none;
+    }
+
+    #app {
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      transform-origin: 50% 50vh;
+      overflow: clip;
+    }
+
+    body.intro #app {
+      transform: scale(.9);
+      border-radius: 28px;
+    }
+
+    /* ==========================================================================
+       4a. HERO SECTION
+       ========================================================================== */
+    section.hero#hero {
+      position: relative;
+      height: 100vh;
+      min-height: 620px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .nav {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 44px;
+      padding: 5px 5px 5px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .9);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .05), 0 6px 18px rgba(0, 0, 0, .06);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .nav .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -.04em;
+      color: var(--ink);
+    }
+
+    .nav .brand svg {
+      width: 30px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .cloud {
+      position: absolute;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .cloud.cloud-l {
+      top: -3%;
+      left: -5%;
+      width: min(44vw, 640px);
+    }
+
+    .cloud.cloud-r {
+      top: 2%;
+      right: -6%;
+      width: min(42vw, 620px);
+    }
+
+    h1#heroTitle.split {
+      position: absolute;
+      z-index: 6;
+      top: 31%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: clamp(34px, 5.2vw, 76px);
+      font-weight: 400;
+      letter-spacing: -.045em;
+      line-height: 1.04;
+      padding: 0 16px;
+    }
+
+    h1#heroTitle em {
+      color: var(--olive);
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    .hero-media {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 72%;
+      z-index: 2;
+      mask-image: linear-gradient(to bottom, transparent 0, #000 22%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22%);
+    }
+
+    .hero-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 70%;
+    }
+
+    .hero-glass#heroGlass {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       4b. STATS SECTION
+       ========================================================================== */
+    section.stats#stats {
+      position: relative;
+      height: 100vh;
+      min-height: 680px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .sq-field {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 42%;
+      z-index: 1;
+      pointer-events: none;
+      mask-image: linear-gradient(#000, transparent);
+      -webkit-mask-image: linear-gradient(#000, transparent);
+      overflow: hidden;
+    }
+
+    .tree-wrap {
+      position: absolute;
+      z-index: 2;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -2%;
+      width: min(340px, 58vw);
+      pointer-events: none;
+    }
+
+    .tree {
+      width: 100%;
+      height: auto;
+    }
+
+    .stats-inner {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      padding: 0 16px;
+    }
+
+    .cards {
+      position: relative;
+      z-index: 4;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: min(880px, 100%);
+    }
+
+    .card {
+      height: 150px;
+      padding: 18px 22px;
+      border-radius: var(--radius);
+      background: var(--lime);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      mask: radial-gradient(circle 17px at 0 55%, #0000 97%, #000) left / 51% 100% no-repeat,
+            radial-gradient(circle 17px at 100% 55%, #0000 97%, #000) right / 51% 100% no-repeat;
+      -webkit-mask: radial-gradient(circle 17px at 0 55%, #0000 97%, #000) left / 51% 100% no-repeat,
+                    radial-gradient(circle 17px at 100% 55%, #0000 97%, #000) right / 51% 100% no-repeat;
+    }
+
+    .card-label {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: #2a3410;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+    }
+
+    .card-val {
+      font-size: clamp(30px, 3.4vw, 44px);
+      font-weight: 600;
+      letter-spacing: -.04em;
+      color: #151a08;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .cards-shadow {
+      width: min(820px, 94%);
+      height: 10px;
+      margin-top: -18px;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(0, 0, 0, .08), transparent);
+      z-index: 3;
+    }
+
+    .logos-wrapper {
+      position: relative;
+      width: min(860px, 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .band#band {
+      position: absolute;
+      z-index: 5;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(340px, 58vw);
+      height: 64px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(255, 255, 255, .12);
+      mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+      pointer-events: none;
+    }
+
+    .logos {
+      position: relative;
+      z-index: 6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      width: min(860px, 100%);
+      padding: 6px 10px;
+      color: #151515;
+    }
+
+    .logo-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      white-space: nowrap;
+    }
+
+    .logo-item.zapier {
+      font-weight: 400;
+    }
+
+    .logo-item.notion {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    /* ==========================================================================
+       4c. HUMAN-IN-THE-LOOP HOVER ACCORDION SECTION
+       ========================================================================== */
+    section.loop#loop {
+      position: relative;
+      height: 100vh;
+      min-height: 680px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .loop-cloud {
+      position: absolute;
+      z-index: 3;
+      top: 4vh;
+      left: -4vw;
+      width: min(36vw, 520px);
+      pointer-events: none;
+    }
+
+    .loop-head {
+      position: absolute;
+      z-index: 4;
+      top: 9vh;
+      left: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 0 16px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .track#track {
+      position: absolute;
+      z-index: 2;
+      inset: 0;
+      display: flex;
+    }
+
+    .panel {
+      position: relative;
+      flex: 0 0 clamp(96px, 11vw, 170px);
+      height: 100%;
+      overflow: hidden;
+      border-right: 1px solid var(--line);
+      cursor: pointer;
+      outline: none;
+      transition: flex-grow .9s cubic-bezier(.77, 0, .18, 1);
+    }
+
+    .panel:last-child {
+      border-right: none;
+    }
+
+    .panel.is-active {
+      flex-grow: 1;
+      cursor: default;
+    }
+
+    .panel-in {
+      position: absolute;
+      left: clamp(14px, 1.8vw, 28px);
+      bottom: 10vh;
+      display: flex;
+      align-items: flex-end;
+      gap: clamp(16px, 2vw, 30px);
+      width: max-content;
+    }
+
+    .num {
+      font-size: clamp(170px, 36vh, 380px);
+      font-weight: 600;
+      line-height: .74;
+      letter-spacing: -.07em;
+      user-select: none;
+    }
+
+    .panel:nth-child(1) .num {
+      color: var(--olive);
+    }
+
+    .panel:nth-child(2) .num {
+      color: var(--green);
+    }
+
+    .panel:nth-child(3) .num {
+      color: var(--lime);
+    }
+
+    .step {
+      position: relative;
+      width: min(400px, 30vw);
+      padding-bottom: 4px;
+      opacity: 0;
+      transform: translateX(-24px);
+      filter: blur(6px);
+      transition: opacity .4s, transform .5s, filter .4s;
+    }
+
+    .panel.is-active .step {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      transition: opacity .7s .4s, transform .9s .35s cubic-bezier(.2, .8, .2, 1), filter .7s .4s;
+    }
+
+    .step h3 {
+      font-size: clamp(20px, 1.7vw, 26px);
+      font-weight: 400;
+      letter-spacing: -.03em;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+
+    .step p {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #2b2e27;
+    }
+
+    .mini-cloud {
+      position: absolute;
+      left: -10%;
+      bottom: calc(100% + clamp(70px, 13vh, 150px));
+      width: min(18vw, 250px);
+      max-width: none;
+      pointer-events: none;
+      animation: driftA 9s ease-in-out infinite alternate;
+      z-index: 5;
+    }
+
+    /* ==========================================================================
+       4d. CTA SECTION
+       ========================================================================== */
+    section.cta#cta {
+      position: relative;
+      height: 110vh;
+      min-height: 720px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .cta-img {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 78%;
+      mask-image: linear-gradient(to bottom, transparent 0, #000 24%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 24%);
+    }
+
+    .cta-img img#ctaImg {
+      width: 100%;
+      height: 118%;
+      object-fit: cover;
+      object-position: center 60%;
+    }
+
+    .petals#petals {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      top: -20px;
+      width: 10px;
+      height: 8px;
+      border-radius: 80% 0 80% 0;
+      background: #f6c4d6;
+      opacity: .85;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translate(var(--dx), 110vh) rotate(540deg);
+      }
+    }
+
+    .cta-card#ctaCard {
+      position: absolute;
+      z-index: 4;
+      left: 50%;
+      top: 30%;
+      transform: translateX(-50%);
+      width: min(680px, calc(100% - 32px));
+      padding: 46px 28px 54px;
+      text-align: center;
+      border-radius: 26px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, .96) 0%, rgba(255, 255, 255, .75) 35%, rgba(255, 255, 255, .12) 100%);
+      border: 1px solid rgba(255, 255, 255, .7);
+      backdrop-filter: blur(16px) saturate(1.1);
+      -webkit-backdrop-filter: blur(16px) saturate(1.1);
+      box-shadow: 0 30px 60px rgba(10, 20, 60, .18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ==========================================================================
+       4e. FOOTER
+       ========================================================================== */
+    footer#footer {
+      background: var(--lime);
+      padding: 34px 4vw 22px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      row-gap: 22px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .f-logo {
+      width: 72px;
+      height: 72px;
+    }
+
+    .f-logo svg {
+      overflow: visible;
+    }
+
+    nav.f-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 13px;
+      color: #1d240c;
+    }
+
+    nav.f-links a:hover {
+      text-decoration: underline;
+    }
+
+    .f-social {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-self: end;
+    }
+
+    .f-social a {
+      display: inline-flex;
+      color: #111;
+      transition: transform .2s ease;
+    }
+
+    .f-social a:hover {
+      transform: scale(1.1);
+    }
+
+    .f-social svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .f-copy {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-size: 11px;
+      color: #2a330f;
+    }
+
+    /* ==========================================================================
+       6. RESPONSIVE ADAPTATIONS
+       ========================================================================== */
+    @media (max-width: 900px) {
+      .nav {
+        gap: 24px;
+      }
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .card {
+        height: 120px;
+      }
+      .logos {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px 26px;
+      }
+      .logo-item {
+        font-size: 17px;
+      }
+      section.stats#stats {
+        height: auto;
+        min-height: 100vh;
+        padding: 90px 0 300px;
+      }
+      .tree-wrap {
+        bottom: 0;
+      }
+      .band#band {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      section.hero#hero {
+        height: 100svh;
+        min-height: 560px;
+      }
+      h1#heroTitle.split {
+        top: 26%;
+      }
+      .hero-media {
+        height: 66%;
+        mask-image: linear-gradient(to bottom, transparent 0, #000 14%);
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14%);
+      }
+      .hero-media video {
+        object-position: 38% 100%;
+        transform: scale(1.12);
+        transform-origin: 50% 100%;
+      }
+      .cloud.cloud-l {
+        width: 70vw;
+        left: -18vw;
+        top: 6%;
+      }
+      .cloud.cloud-r {
+        width: 66vw;
+        right: -20vw;
+        top: 10%;
+      }
+      .nav {
+        top: 16px;
+        gap: 18px;
+        padding-left: 12px;
+      }
+      .nav .brand {
+        font-size: 19px;
+      }
+      section.loop#loop {
+        height: auto;
+        min-height: 0;
+        padding: 12vh 0 40px;
+      }
+      .loop-head {
+        position: relative;
+        top: auto;
+      }
+      .loop-cloud {
+        width: 62vw;
+        left: -14vw;
+        top: 2vh;
+        opacity: .9;
+      }
+      .track#track {
+        position: relative;
+        inset: auto;
+        flex-direction: column;
+        margin-top: 40px;
+      }
+      .panel {
+        flex: none;
+        height: auto;
+        overflow: visible;
+        border-right: none;
+        border-top: 1px solid var(--line);
+        cursor: auto;
+      }
+      .panel-in {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        width: auto;
+        padding: 28px 16px;
+        gap: 18px;
+      }
+      .num {
+        font-size: 150px;
+      }
+      .step {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        width: auto;
+      }
+      .mini-cloud {
+        display: none;
+      }
+      section.cta#cta {
+        height: auto;
+        min-height: 0;
+        padding: 60px 0 0;
+      }
+      .cta-img {
+        position: relative;
+        height: 92vh;
+        min-height: 620px;
+      }
+      .cta-img img#ctaImg {
+        object-position: 30% 60%;
+      }
+      .cta-card#ctaCard {
+        top: 120px;
+        padding: 34px 18px 42px;
+      }
+      footer#footer {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+      .f-social {
+        justify-self: center;
+      }
+      nav.f-links {
+        gap: 18px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .drift-a, .drift-b, .petal {
+        animation: none !important;
+      }
+    }
+  </style>
 </head>
-<body>
-<header class="wrap">
-  <nav class="nav" aria-label="Main navigation">
-    <a class="brand" href="#home"><span class="brand-mark">N</span><span>NEXORA</span></a>
-    <div class="nav-links" id="navLinks">
-      <a href="#features">Features</a><a href="#platform">Platform</a><a href="#results">Results</a><a href="#contact">Contact</a>
-    </div>
-    <a class="nav-cta" href="#contact">Let's talk ↗</a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-  </nav>
-</header>
+<body class="intro">
 
-<main>
-<section class="wrap hero" id="home">
-  <div class="hero-content">
-    <div class="eyebrow"><span class="dot"></span> THE NEXT ERA OF DIGITAL WORK</div>
-    <h1>Ideas into <span class="gradient-text">impact.</span><br>Without limits.</h1>
-    <p class="hero-copy">A smarter way to create, launch, and scale what comes next. Bring your boldest ideas to life with tools designed for people who think beyond the ordinary.</p>
-    <div class="hero-actions"><a class="btn btn-primary" href="#contact">Start building <span aria-hidden="true">↗</span></a><a class="btn" href="#features">Explore the platform ↓</a></div>
-    <div class="micro-proof"><div class="avatars"><span class="avatar">A</span><span class="avatar">M</span><span class="avatar">J</span><span class="avatar">K</span></div><span>Made for the curious, built for what's next.</span></div>
+  <!-- Intro blurred backdrop -->
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <!-- App wrapper -->
+  <div id="app">
+
+    <!-- ====================================================================
+         4a. HERO SECTION
+         ==================================================================== -->
+    <section class="hero" id="hero">
+      <!-- Floating pill nav -->
+      <nav class="nav" aria-label="Main Navigation">
+        <a href="#hero" class="brand" aria-label="Petalyx home">
+          <svg viewBox="0 0 30 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="4" cy="17" r="3.6" fill="currentColor"/>
+            <path d="M10.5 18.5 16.8 5.2 25.5 18.5" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>petalyx</span>
+        </a>
+        <a href="#cta" class="btn">Start for $0</a>
+      </nav>
+
+      <!-- Clouds -->
+      <div class="cloud cloud-l" data-par="-60" aria-hidden="true">
+        <img class="drift-a" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093216_44218665-b15e-4566-a2d4-2676ab03609d.png" alt="" width="100%">
+      </div>
+
+      <div class="cloud cloud-r" data-par="-90" aria-hidden="true">
+        <img class="drift-b" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093215_0f37c0c3-f82c-485b-87dd-5a35b75a8782.png" alt="" width="100%">
+      </div>
+
+      <!-- Headline -->
+      <h1 class="split" id="heroTitle">
+        Benchmark the impact of<br>all your <em>AI staff.</em>
+      </h1>
+
+      <!-- Media: Video -->
+      <div class="hero-media" aria-hidden="true">
+        <video 
+          id="heroVideo" 
+          autoplay 
+          muted 
+          loop 
+          playsinline 
+          preload="auto" 
+          poster="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093215_b7826239-e451-4e15-b42b-d6bcf9497a32.png" 
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093331_5998f443-1b9c-4b62-820c-8219c73c72c4.mp4"
+        ></video>
+      </div>
+
+      <!-- Frosted glass squares container -->
+      <div class="hero-glass" id="heroGlass" aria-hidden="true"></div>
+    </section>
+
+    <!-- ====================================================================
+         4b. STATS SECTION
+         ==================================================================== -->
+    <section class="stats" id="stats">
+      <div class="sq-field" data-count="22" aria-hidden="true"></div>
+
+      <!-- Cherry Blossom Tree -->
+      <div class="tree-wrap" aria-hidden="true">
+        <img 
+          id="tree" 
+          class="tree" 
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093215_95f11900-c4a0-49ad-bb2d-bb927dd594ee.png" 
+          alt="Pink cherry blossom trees"
+        >
+      </div>
+
+      <div class="stats-inner">
+        <span class="pill reveal">Teams rely on us</span>
+
+        <h2 class="h2 split" style="margin-bottom: 18px;">
+          80,000+ flows<br>finished on autopilot.
+        </h2>
+
+        <!-- Four ticket cards -->
+        <div class="cards">
+          <div class="card" data-to="40" data-dec="0" data-suf="%">
+            <span class="card-label">Staff Time Freed</span>
+            <b class="card-val">0%</b>
+          </div>
+
+          <div class="card" data-to="300" data-dec="0" data-suf="+">
+            <span class="card-label">Customers</span>
+            <b class="card-val">0+</b>
+          </div>
+
+          <div class="card" data-to="99.2" data-dec="1" data-suf="%">
+            <span class="card-label">Task Success Rates</span>
+            <b class="card-val">0%</b>
+          </div>
+
+          <div class="card" data-to="99.2" data-dec="1" data-suf="%">
+            <span class="card-label">Output Reliability</span>
+            <b class="card-val">0%</b>
+          </div>
+        </div>
+
+        <div class="cards-shadow" aria-hidden="true"></div>
+
+        <!-- Logos wrapper with frosted band -->
+        <div class="logos-wrapper">
+          <div class="band" id="band" aria-hidden="true"></div>
+
+          <div class="logos" aria-label="Integrations">
+            <!-- Slack -->
+            <div class="logo-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2h2v2a2 2 0 0 1-2 2zm1 0a2 2 0 0 1 2-2 2 2 0 0 1 2 2v5a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-5zm2-8a2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2v2H9zm0 1a2 2 0 0 1 2 2 2 2 0 0 1-2 2H4a2 2 0 0 1-2-2 2 2 0 0 1 2-2h5zm8 2a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-2v-2a2 2 0 0 1 2-2zm-1 0a2 2 0 0 1-2 2 2 2 0 0 1-2-2V5a2 2 0 0 1 2-2 2 2 0 0 1 2 2v5zm-2 8a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2v-2h2zm0-1a2 2 0 0 1-2-2 2 2 0 0 1 2-2h5a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-5z"/>
+              </svg>
+              <span>slack</span>
+            </div>
+
+            <!-- Zapier -->
+            <div class="logo-item zapier">
+              <span>_zapier</span>
+            </div>
+
+            <!-- Dropbox -->
+            <div class="logo-item">
+              <svg width="20" height="18" viewBox="0 0 24 22" fill="currentColor">
+                <path d="m6 2-6 5 6 5 6-5-6-5zm12 0-6 5 6 5 6-5-6-5zM0 12l6 5 6-5-6-5-6 5zm18 0-6 5 6 5 6-5-6 5zm-6 6-6-5-6 5 6 5 6-5zm0 0 6-5 6 5-6 5-6-5z"/>
+              </svg>
+              <span>Dropbox</span>
+            </div>
+
+            <!-- HubSpot -->
+            <div class="logo-item">
+              <span>HubSpot</span>
+            </div>
+
+            <!-- Notion -->
+            <div class="logo-item notion">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="4"/>
+                <path d="M8 7v10l8-10v10"/>
+              </svg>
+              <span>Notion</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         4c. HUMAN-IN-THE-LOOP HOVER ACCORDION SECTION
+         ==================================================================== -->
+    <section class="loop" id="loop">
+      <!-- Loop Cloud with 3 glass squares -->
+      <div class="loop-cloud" data-par="-50" aria-hidden="true">
+        <div style="position: relative; width: 100%;">
+          <img class="drift-a" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093216_44218665-b15e-4566-a2d4-2676ab03609d.png" alt="" width="100%">
+          <div class="glass" style="left: 6%; top: 30%; width: 15%; aspect-ratio: 1;"></div>
+          <div class="glass" style="left: 23%; top: 58%; width: 13%; aspect-ratio: 1;"></div>
+          <div class="glass" style="left: 38%; top: 24%; width: 13%; aspect-ratio: 1;"></div>
+        </div>
+      </div>
+
+      <div class="loop-head">
+        <span class="pill reveal">Expert escalation</span>
+        <h2 class="h2 split">Humans take over only at<br>the crunch.</h2>
+      </div>
+
+      <!-- Accordion Track -->
+      <div class="track" id="track">
+        <!-- Panel 1 (starts active) -->
+        <div class="panel is-active" tabindex="0" aria-label="Step 1: Ticket comes in">
+          <div class="panel-in">
+            <span class="num">1</span>
+            <div class="step">
+              <img class="mini-cloud" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093215_0f37c0c3-f82c-485b-87dd-5a35b75a8782.png" alt="" aria-hidden="true">
+              <h3>Ticket comes in</h3>
+              <p>A shopper files a return claim with the purchase details, why it's going back, and any proof they can share.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2 -->
+        <div class="panel" tabindex="0" aria-label="Step 2: Review record">
+          <div class="panel-in">
+            <span class="num">2</span>
+            <div class="step">
+              <img class="mini-cloud" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093216_44218665-b15e-4566-a2d4-2676ab03609d.png" alt="" aria-hidden="true">
+              <h3>Review record</h3>
+              <p>Your agent scans the buyer profile, earlier purchases, prior returns, and any notable account events.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3 -->
+        <div class="panel" tabindex="0" aria-label="Step 3: Apply the rules">
+          <div class="panel-in">
+            <span class="num">3</span>
+            <div class="step">
+              <img class="mini-cloud" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093215_0f37c0c3-f82c-485b-87dd-5a35b75a8782.png" alt="" aria-hidden="true">
+              <h3>Apply the rules</h3>
+              <p>Your agent measures the claim against return terms, qualifying conditions, time limits, and edge cases.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         4d. CTA SECTION
+         ==================================================================== -->
+    <section class="cta" id="cta">
+      <div class="sq-field" data-count="16" aria-hidden="true"></div>
+
+      <div class="cta-img" aria-hidden="true">
+        <img id="ctaImg" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093217_cc690198-ad8c-4127-8734-8485bd878351.png" alt="Moonlit cherry blossom valley">
+      </div>
+
+      <div class="petals" id="petals" aria-hidden="true"></div>
+
+      <div class="cta-card" id="ctaCard">
+        <span class="pill">Get started</span>
+        <h2 class="h2 split" style="margin: 16px 0 10px; font-size: clamp(24px, 2.8vw, 38px);">
+          Every hour your agents free up is gold.
+        </h2>
+        <p class="reveal" style="font-size: 14px; color: #1d2230; margin-bottom: 20px;">
+          Set up your first AI agent in minutes and see results on day one.
+        </p>
+        <a href="#hero" class="btn reveal">Start for $0</a>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         4e. FOOTER
+         ==================================================================== -->
+    <footer id="footer">
+      <div class="f-logo" aria-label="Petalyx">
+        <svg viewBox="0 0 80 80" width="72" height="72">
+          <circle id="fRing" cx="40" cy="40" r="37" fill="none" stroke="#111" stroke-width="2.4" stroke-dasharray="233" stroke-dashoffset="233" transform="rotate(-90 40 40)"/>
+          <circle class="fdot" cx="22" cy="40" r="4.5" fill="#111"/>
+          <circle class="fdot" cx="40" cy="40" r="4.5" fill="#111"/>
+          <circle class="fdot" cx="58" cy="40" r="4.5" fill="#111"/>
+          <path id="fMark" d="M33 53 43 31 56 53" fill="none" stroke="#111" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="60" stroke-dashoffset="60"/>
+        </svg>
+      </div>
+
+      <nav class="f-links" aria-label="Footer Navigation">
+        <a href="#hero">Toolkit</a>
+        <a href="#hero">Mission</a>
+        <a href="#hero">Help desk</a>
+        <a href="#hero">Terms</a>
+      </nav>
+
+      <div class="f-social" aria-label="Social media">
+        <!-- X logo -->
+        <a href="https://x.example" aria-label="X" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+
+        <!-- Instagram outline -->
+        <a href="https://instagram.example" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+
+        <!-- LinkedIn filled -->
+        <a href="https://linkedin.example" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="f-copy">
+        © 2026 Petalyx. All rights reserved.
+      </div>
+    </footer>
+
   </div>
-  <div class="visual" aria-label="Abstract platform dashboard illustration">
-    <div class="orb"></div><div class="orbit-dot"></div>
-    <div class="float-card one"><div class="float-head">✦ SYSTEM STATUS</div><div class="float-value"><span class="float-icon">✓</span>All systems go</div></div>
-    <div class="float-card two"><div class="float-head">WEEKLY GROWTH</div><div class="float-value">↗ +28.4%</div></div>
-    <div class="dashboard">
-      <div class="dash-top"><div class="dash-title">Performance overview</div><span class="live">● LIVE DATA</span></div>
-      <div class="dash-stat"><div><div class="stat-label">Total engagement</div><div class="stat-number">84,392</div></div><div class="trend">↗ 18.6%</div></div>
-      <div class="chart"><div class="chart-grid"></div><svg viewBox="0 0 400 115" preserveAspectRatio="none" role="img" aria-label="Decorative rising performance chart"><defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f7bff" stop-opacity=".45"/><stop offset="1" stop-color="#8f7bff" stop-opacity="0"/></linearGradient></defs><path d="M0 94 C25 88 30 72 55 80 S90 95 112 63 S150 72 172 50 S208 70 230 42 S270 52 294 30 S333 48 350 20 S380 25 400 7 L400 115 L0 115Z" fill="url(#area)"/><path d="M0 94 C25 88 30 72 55 80 S90 95 112 63 S150 72 172 50 S208 70 230 42 S270 52 294 30 S333 48 350 20 S380 25 400 7" fill="none" stroke="#9b8bff" stroke-width="2.5" vector-effect="non-scaling-stroke"/></svg></div>
-      <div class="dash-bottom"><div class="mini"><small>Conversion</small><strong>+12.8%</strong></div><div class="mini"><small>Reach</small><strong>32.6k</strong></div><div class="mini"><small>Efficiency</small><strong>96.4%</strong></div></div>
-    </div>
-  </div>
-</section>
 
-<section class="wrap trust">
-  <p>A little imagination. A lot of possibility.</p>
-  <div class="logo-row"><span>◈ VERTEX</span><span>✳ orbit</span><span>⬡ SYNTHETIC</span><span>◉ prism</span><span>✦ NOVALAB</span></div>
-</section>
+  <!-- External JavaScript libraries in specified order -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 
-<section class="section wrap" id="features">
-  <div class="section-head reveal"><div class="kicker">Made for momentum</div><h2>Everything you need.<br><span class="gradient-text">Nothing holding you back.</span></h2><p>Less busywork, more breakthrough moments. A flexible toolkit that helps your team move from “what if?” to “what's next?”</p></div>
-  <div class="features">
-    <article class="feature reveal"><div class="feature-icon">✧</div><h3>Intelligent by design</h3><p>Turn complex workflows into simple, focused experiences that help your best ideas get the attention they deserve.</p><a href="#platform">Discover the details ↗</a></article>
-    <article class="feature reveal"><div class="feature-icon">⌘</div><h3>Your workflow, evolved</h3><p>Bring your tools and ideas together in one streamlined space. Spend less time switching and more time creating.</p><a href="#platform">Explore workflows ↗</a></article>
-    <article class="feature reveal"><div class="feature-icon">◈</div><h3>Clarity at every step</h3><p>See the signal through the noise with thoughtful insights, clear progress, and information you can actually use.</p><a href="#results">See the difference ↗</a></article>
-    <article class="feature reveal"><div class="feature-icon">↗</div><h3>Built to scale</h3><p>Start with what you need today and grow into tomorrow. Your ambitions shouldn't be limited by your tools.</p><a href="#contact">Plan your next step ↗</a></article>
-    <article class="feature reveal"><div class="feature-icon">⛨</div><h3>Security-first mindset</h3><p>Thoughtful controls and a privacy-conscious approach help make trust part of the experience, not an afterthought.</p><a href="#contact">Our approach ↗</a></article>
-    <article class="feature reveal"><div class="feature-icon">⌁</div><h3>Beautifully connected</h3><p>A clean, consistent experience across devices keeps your momentum going wherever your next idea finds you.</p><a href="#platform">Take a closer look ↗</a></article>
-  </div>
-</section>
+  <!-- Application Logic -->
+  <script>
+    (function () {
+      'use strict';
 
-<section class="section wrap" id="platform">
-  <div class="showcase">
-    <div class="showcase-copy reveal"><div class="kicker">Under the surface</div><h2>Powerful tools.<br><span class="gradient-text">Effortless flow.</span></h2><p>Great technology should feel natural. NEXORA brings your process into focus with a clean workspace, clear signals, and the flexibility to make it your own.</p>
-      <div class="checklist"><div class="check"><i>✓</i><span>A workspace that adapts to the way you think</span></div><div class="check"><i>✓</i><span>Insights that help you make confident decisions</span></div><div class="check"><i>✓</i><span>Flexible foundations for your next big idea</span></div></div>
-      <a class="btn btn-primary" href="#contact">See what you can create ↗</a>
-    </div>
-    <div class="code-window reveal"><div class="window-bar"><span class="win-dot"></span><span class="win-dot"></span><span class="win-dot"></span><span class="window-label">nexora.config.js</span></div>
-<pre><span class="c-muted">// Your next idea starts here.</span>
-<span class="c-purple">const</span> vision = {
-  <span class="c-cyan">possibility</span>: <span class="c-green">"limitless"</span>,
-  <span class="c-cyan">workflow</span>: <span class="c-green">"in sync"</span>,
-  <span class="c-cyan">mindset</span>: <span class="c-green">"always curious"</span>,
-  <span class="c-cyan">future</span>: <span class="c-green">"in progress"</span>
-};
+      // 1) Initialize GSAP plugins & environment flags
+      gsap.registerPlugin(ScrollTrigger);
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = window.innerWidth <= 760;
 
-<span class="c-purple">async function</span> <span class="c-cyan">makeItHappen</span>(idea) {
-  <span class="c-purple">const</span> plan = <span class="c-purple">await</span> imagine(idea);
-  <span class="c-purple">const</span> result = <span class="c-purple">await</span> build(plan);
-
-  <span class="c-purple">return</span> result.<span class="c-cyan">ship</span>({
-    confidence: <span class="c-green">"high"</span>,
-    limits: <span class="c-green">"none"</span>
-  });
-}
-
-<span class="c-muted">// Ready when you are. ✦</span></pre>
-    </div>
-  </div>
-  <div class="metrics reveal" id="results"><div class="metric"><strong class="counter" data-target="3.2" data-suffix="×">0</strong><span>More room to think big</span></div><div class="metric"><strong class="counter" data-target="40" data-suffix="%">0</strong><span>Less repetitive work</span></div><div class="metric"><strong class="counter" data-target="24" data-suffix="/7">0</strong><span>Your ideas, always on</span></div><div class="metric"><strong class="counter" data-target="100" data-suffix="%">0</strong><span>Possibility mindset</span></div></div>
-</section>
-
-<section class="section wrap">
-  <div class="testimonial reveal"><div class="quote-mark">“</div><blockquote>The best tools don't just help you do more. They make you see what's possible in the first place.</blockquote><div class="person"><div class="person-avatar">N</div><div class="person-info"><strong>The NEXORA philosophy</strong><small>Built for people moving ideas forward</small></div></div></div>
-</section>
-
-<section class="wrap" id="contact">
-  <div class="cta-panel reveal"><div class="kicker">Your next chapter starts now</div><h2>Ready to make <span class="gradient-text">something remarkable?</span></h2><p>Bring the ambition. Bring the questions. Let's turn your next big idea into something real.</p><a class="btn btn-primary" href="mailto:hello@example.com?subject=Let's%20build%20something%20remarkable">Let's build together ↗</a></div>
-</section>
-</main>
-
-<footer><div class="wrap footer-inner"><a class="brand" href="#home"><span class="brand-mark">N</span><span>NEXORA</span></a><div class="footer-copy">© <span id="year"></span> NEXORA Studio. Made for what's next.</div><div class="footer-links"><a href="#features">Features</a><a href="#platform">Platform</a><a href="#contact">Contact</a></div></div></footer>
-
-<script>
-  const menuToggle = document.getElementById('menuToggle');
-  const navLinks = document.getElementById('navLinks');
-  menuToggle.addEventListener('click', () => {
-    const open = navLinks.classList.toggle('open');
-    menuToggle.setAttribute('aria-expanded', String(open));
-    menuToggle.textContent = open ? '✕' : '☰';
-  });
-  navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
-    navLinks.classList.remove('open');
-    menuToggle.setAttribute('aria-expanded', 'false');
-    menuToggle.textContent = '☰';
-  }));
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+      // 2) Text splitting helper for .split elements
+      function splitTextIntoWords(element) {
+        function traverse(node) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            const text = node.textContent;
+            if (!text.trim()) return;
+            const words = text.split(/(\s+)/);
+            const fragment = document.createDocumentFragment();
+            words.forEach(w => {
+              if (/^\s+$/.test(w)) {
+                fragment.appendChild(document.createTextNode(w));
+              } else if (w) {
+                const span = document.createElement('span');
+                span.className = 'w';
+                span.textContent = w;
+                fragment.appendChild(span);
+              }
+            });
+            node.parentNode.replaceChild(fragment, node);
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            if (node.nodeName !== 'BR') {
+              Array.from(node.childNodes).forEach(traverse);
+            }
+          }
+        }
+        Array.from(element.childNodes).forEach(traverse);
       }
-    });
-  }, {threshold: 0.12});
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  const countObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      const target = Number(el.dataset.target);
-      const suffix = el.dataset.suffix || '';
-      const decimals = String(target).includes('.') ? 1 : 0;
-      const start = performance.now();
-      const duration = 1200;
-      function tick(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = (target * eased).toFixed(decimals) + suffix;
-        if (progress < 1) requestAnimationFrame(tick);
+      document.querySelectorAll('.split').forEach(splitTextIntoWords);
+
+      // 3) .sq-field generator
+      document.querySelectorAll('.sq-field').forEach(field => {
+        const count = parseInt(field.getAttribute('data-count'), 10) || 16;
+        for (let i = 0; i < count; i++) {
+          const col = Math.floor(Math.random() * 30);
+          const row = Math.floor(Math.random() * 6);
+          const sq = document.createElement('div');
+          sq.className = 'grid-sq';
+          sq.style.width = '46px';
+          sq.style.height = '46px';
+          sq.style.left = (col * 48 - 10) + 'px';
+          sq.style.top = (row * 48 + 6) + 'px';
+          field.appendChild(sq);
+
+          if (!reduce) {
+            gsap.fromTo(sq, 
+              { opacity: 0 }, 
+              {
+                opacity: 1,
+                duration: 1.2,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+                delay: Math.random() * 4,
+                repeatDelay: Math.random() * 3
+              }
+            );
+          }
+        }
+      });
+
+      // 4) Hero glass squares appended to #heroGlass
+      const heroGlass = document.getElementById('heroGlass');
+      const glassCoords = [
+        [3, 64], [3, 71], [6.5, 71], [10, 71], [3, 78], [-1, 70],
+        [45.5, 76], [49, 80], [49, 76], [52.5, 76],
+        [86, 58], [86, 67], [82, 76], [89.5, 76], [86, 84]
+      ];
+
+      glassCoords.forEach(([x, y], idx) => {
+        if (isMobile && idx % 2 === 1) return; // Hide every odd-indexed on mobile
+        const sq = document.createElement('div');
+        sq.className = 'glass';
+        sq.style.left = x + '%';
+        sq.style.top = y + '%';
+        if (x > 40 && x < 60) {
+          sq.style.width = 'clamp(28px, 3.4vw, 44px)';
+        } else {
+          sq.style.width = 'clamp(36px, 5.4vw, 74px)';
+        }
+        sq.style.aspectRatio = '1';
+        heroGlass.appendChild(sq);
+
+        if (!reduce) {
+          gsap.to(sq, {
+            opacity: 0.15,
+            duration: 0.9,
+            yoyo: true,
+            repeat: -1,
+            ease: 'sine.inOut',
+            delay: Math.random() * 3,
+            repeatDelay: 1 + Math.random() * 3
+          });
+        }
+      });
+
+      // 5) Falling Petals in CTA section
+      const petalsWrap = document.getElementById('petals');
+      if (petalsWrap) {
+        for (let i = 0; i < 18; i++) {
+          const petal = document.createElement('span');
+          petal.className = 'petal';
+          petal.style.left = Math.random() * 100 + '%';
+          const dx = (Math.random() * 160 - 80) + 'px';
+          petal.style.setProperty('--dx', dx);
+          const dur = (9 + Math.random() * 9) + 's';
+          const delay = (-Math.random() * 15) + 's';
+          const scale = (0.6 + Math.random() * 0.8);
+          petal.style.animationDuration = dur;
+          petal.style.animationDelay = delay;
+          petal.style.transform = `scale(${scale})`;
+          petalsWrap.appendChild(petal);
+        }
       }
-      requestAnimationFrame(tick);
-      countObserver.unobserve(el);
-    });
-  }, {threshold: 0.7});
-  document.querySelectorAll('.counter').forEach(el => countObserver.observe(el));
-</script>
+
+      // 6) Lenis Smooth Scroll
+      const lenis = new Lenis({
+        duration: 1.25,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true
+      });
+
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0);
+
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = this.getAttribute('href');
+          if (target && target !== '#') {
+            lenis.scrollTo(target, { duration: 1.6 });
+          }
+        });
+      });
+
+      // 7) INTRO (page zooms out of blurred landscape)
+      lenis.stop();
+      const heroWords = document.querySelectorAll('#heroTitle .w');
+      const navEl = document.querySelector('.nav');
+
+      gsap.set(heroWords, { opacity: 0, y: 24, filter: 'blur(10px)' });
+      gsap.set(navEl, { opacity: 0, y: -16 });
+
+      const introTl = gsap.timeline({
+        delay: 0.25,
+        onComplete: () => {
+          document.body.classList.remove('intro');
+          gsap.set('#app', { clearProps: 'all' });
+          const backdrop = document.querySelector('.backdrop');
+          if (backdrop) backdrop.remove();
+          lenis.start();
+          setupScroll();
+        }
+      });
+
+      introTl
+        .fromTo('#app', 
+          { scale: 0.9, borderRadius: 28 }, 
+          { scale: 1, borderRadius: 0, duration: 1.4, ease: 'expo.inOut' }
+        )
+        .to(navEl, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.5")
+        .to(heroWords, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1, stagger: 0.07, ease: 'power3.out' }, "-=0.7")
+        .from('.cloud-l', { x: -120, opacity: 0, duration: 1.6, ease: 'power3.out' }, 0.4)
+        .from('.cloud-r', { x: 120, opacity: 0, duration: 1.6, ease: 'power3.out' }, 0.4)
+        .from('#heroGlass .glass', {
+          opacity: 0,
+          scale: 0.6,
+          duration: 0.6,
+          stagger: { each: 0.05, from: 'random' },
+          ease: 'back.out(2)'
+        }, "-=1");
+
+      // 8) setupScroll(): All scroll triggers, pinning, counters, and reveals
+      function setupScroll() {
+        // Hero Parallax
+        gsap.to('#heroTitle', {
+          yPercent: -60,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '#hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true
+          }
+        });
+
+        document.querySelectorAll('#hero [data-par]').forEach(el => {
+          const par = parseFloat(el.getAttribute('data-par')) || 0;
+          gsap.to(el, {
+            y: par * 2,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '#hero',
+              start: 'top top',
+              end: 'bottom top',
+              scrub: true
+            }
+          });
+        });
+
+        gsap.to('.hero-media', {
+          yPercent: 8,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '#hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true
+          }
+        });
+
+        // Generic .reveal elements
+        document.querySelectorAll('.reveal').forEach(el => {
+          gsap.from(el, {
+            opacity: 0,
+            y: 16,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%'
+            }
+          });
+        });
+
+        // Word reveal for .split in stats, loop, and cta
+        document.querySelectorAll('#stats .split, #loop .split, #cta .split').forEach(title => {
+          const words = title.querySelectorAll('.w');
+          if (words.length) {
+            gsap.from(words, {
+              opacity: 0,
+              y: 22,
+              filter: 'blur(8px)',
+              duration: 0.9,
+              stagger: 0.06,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: title,
+                start: 'top 80%'
+              }
+            });
+          }
+        });
+
+        // Counter helper
+        const cards = document.querySelectorAll('.card');
+        function setCounters(p) {
+          cards.forEach(card => {
+            const target = parseFloat(card.getAttribute('data-to'));
+            const dec = parseInt(card.getAttribute('data-dec'), 10) || 0;
+            const suf = card.getAttribute('data-suf') || '';
+            const valEl = card.querySelector('.card-val');
+            if (valEl) {
+              valEl.textContent = (target * p).toFixed(dec) + suf;
+            }
+          });
+        }
+
+        // MatchMedia for Desktop vs Mobile
+        const mm = gsap.matchMedia();
+
+        // Desktop (min-width: 901px)
+        mm.add('(min-width: 901px)', () => {
+          // Cards reveal
+          gsap.from('.card', {
+            y: 40,
+            opacity: 0,
+            stagger: 0.08,
+            duration: 0.9,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '.cards',
+              start: 'top 70%'
+            }
+          });
+
+          // Pin #stats and scrub counters + tree rise
+          const statsPinTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: '#stats',
+              start: 'top top',
+              end: '+=120%',
+              pin: true,
+              scrub: 1
+            }
+          });
+
+          const proxy = { p: 0 };
+          statsPinTl
+            .to(proxy, {
+              p: 1,
+              ease: 'none',
+              onUpdate: () => setCounters(proxy.p)
+            }, 0)
+            .fromTo('#tree', 
+              { yPercent: 75 }, 
+              { yPercent: 6, ease: 'none' }, 
+              0
+            );
+        });
+
+        // Mobile / Tablet stats (max-width: 900px)
+        mm.add('(max-width: 900px)', () => {
+          gsap.from('.card', {
+            y: 30,
+            opacity: 0,
+            stagger: 0.08,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '.cards',
+              start: 'top 85%'
+            }
+          });
+
+          const proxy = { p: 0 };
+          gsap.to(proxy, {
+            p: 1,
+            duration: 2,
+            ease: 'power2.out',
+            onUpdate: () => setCounters(proxy.p),
+            scrollTrigger: {
+              trigger: '.cards',
+              start: 'top 80%'
+            }
+          });
+
+          gsap.fromTo('#tree', 
+            { yPercent: 40 }, 
+            {
+              yPercent: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: '#stats',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          );
+        });
+
+        // Loop Accordion Desktop (min-width: 761px)
+        mm.add('(min-width: 761px)', () => {
+          const panels = document.querySelectorAll('.panel');
+          panels.forEach(p => {
+            function activate() {
+              panels.forEach(other => other.classList.remove('is-active'));
+              p.classList.add('is-active');
+            }
+            p.addEventListener('mouseenter', activate);
+            p.addEventListener('focus', activate);
+            p.addEventListener('click', activate);
+          });
+
+          gsap.from('.panel-in', {
+            y: 120,
+            opacity: 0,
+            duration: 1.1,
+            stagger: 0.12,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '#loop',
+              start: 'top 60%'
+            }
+          });
+
+          gsap.to('.loop-cloud', {
+            x: 60,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '#loop',
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true
+            }
+          });
+        });
+
+        // Loop Mobile (max-width: 760px)
+        mm.add('(max-width: 760px)', () => {
+          document.querySelectorAll('.panel').forEach(p => {
+            gsap.from(p.querySelectorAll('.num, .step h3, .step p'), {
+              y: 40,
+              opacity: 0,
+              duration: 0.9,
+              stagger: 0.1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: p,
+                start: 'top 85%'
+              }
+            });
+          });
+        });
+
+        // CTA Parallax and Card reveal
+        gsap.fromTo('#ctaImg', 
+          { yPercent: -12 }, 
+          {
+            yPercent: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '#cta',
+              start: 'top bottom',
+              end: 'bottom bottom',
+              scrub: true
+            }
+          }
+        );
+
+        gsap.from('#ctaCard', {
+          y: 80,
+          scale: 0.94,
+          opacity: 0,
+          filter: 'blur(10px)',
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '#cta',
+            start: 'top 60%'
+          }
+        });
+
+        // Footer Logo Animation
+        const footTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: '#footer',
+            start: 'top 92%'
+          }
+        });
+
+        footTl
+          .to('.fdot', {
+            y: -8,
+            duration: 0.25,
+            stagger: 0.08,
+            yoyo: true,
+            repeat: 3,
+            ease: 'sine.inOut'
+          })
+          .to('.fdot', {
+            attr: { cx: 27, cy: 50 },
+            duration: 0.45,
+            ease: 'power3.inOut'
+          })
+          .to('.fdot:nth-child(3), .fdot:nth-child(4)', {
+            opacity: 0,
+            duration: 0.1
+          })
+          .to('#fMark', {
+            strokeDashoffset: 0,
+            duration: 0.6,
+            ease: 'power3.out'
+          }, "-=0.05")
+          .to('.fdot:nth-child(2)', {
+            attr: { r: 5.5 },
+            ease: 'back.out(3)',
+            duration: 0.4
+          }, "<")
+          .to('#fRing', {
+            strokeDashoffset: 0,
+            duration: 0.9,
+            ease: 'power2.inOut'
+          }, "-=0.3");
+
+        ScrollTrigger.refresh();
+      }
+
+      window.addEventListener('load', () => {
+        ScrollTrigger.refresh();
+      });
+    })();
+  </script>
 </body>
 </html>
